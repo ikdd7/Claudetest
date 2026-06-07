@@ -1,223 +1,178 @@
 import Link from "next/link";
-import { Search, ChefHat, Tv, Sparkles, ArrowRight } from "lucide-react";
-import DramaCard from "@/components/DramaCard";
+import Image from "next/image";
+import { Search, Sparkles, ArrowRight } from "lucide-react";
 import RecipeCard from "@/components/RecipeCard";
-import { dramas, getAllRecipes } from "@/data/dramas";
+import DramaCard from "@/components/DramaCard";
+import { dramas } from "@/data/dramas";
+
+const CATEGORIES = [
+  { label: "전체", href: "/" },
+  { label: "Easy", href: "/search?q=easy" },
+  { label: "Medium", href: "/search?q=medium" },
+  { label: "Hard", href: "/search?q=hard" },
+  { label: "라면·국수", href: "/search?q=ramyeon" },
+  { label: "BBQ", href: "/search?q=bbq" },
+  { label: "디저트", href: "/search?q=dessert" },
+  { label: "AI 레시피", href: "/search" },
+];
 
 export default function HomePage() {
-  const featuredDramas = dramas.slice(0, 6);
-  const trendingRecipes = getAllRecipes().slice(0, 6);
+  const featuredRecipe = dramas[0].recipes[0];
+  const featuredSlug = featuredRecipe.slug.replace(/^(cloy|bp|eaw|qot|mlfts|reply1988|startup)-?/, "");
+  const featuredImg = `/api/og?slug=${featuredSlug}&name=${encodeURIComponent(featuredRecipe.foodName)}&korean=${encodeURIComponent(featuredRecipe.foodNameKorean)}&type=recipe`;
 
   return (
-    <div className="bg-[#0A0A0A]">
-      {/* HERO SECTION */}
-      <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden korean-pattern-bg">
-        {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#E50914]/5 via-transparent to-[#F5A623]/5" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent" />
+    <div className="bg-[#111111] min-h-screen">
 
-        {/* Decorative elements */}
-        <div className="absolute top-20 left-10 w-64 h-64 bg-[#E50914]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F5A623]/5 rounded-full blur-3xl" />
+      {/* ── HERO BANNER ── */}
+      <section className="relative mx-3 mt-3 rounded-3xl overflow-hidden" style={{ height: "52vw", maxHeight: "520px", minHeight: "260px" }}>
+        <Image src={featuredImg} alt={featuredRecipe.foodName} fill className="object-cover scale-105" unoptimized priority />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-[#E50914]/10 border border-[#E50914]/20 text-[#E50914] text-xs tracking-widest uppercase px-4 py-2 mb-6">
-            <Sparkles className="w-3 h-3" />
-            AI-Powered K-Drama Recipes
+        {/* Search — top */}
+        <div className="absolute top-4 left-4 right-4 md:left-6 md:right-6">
+          <Link href="/search"
+            className="flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-full px-4 py-2.5 border border-white/15 max-w-md">
+            <Search className="w-4 h-4 text-white/60 flex-shrink-0" />
+            <span className="text-white/50 text-sm">레시피 검색...</span>
+          </Link>
+        </div>
+
+        {/* Content — bottom left */}
+        <div className="absolute bottom-0 left-0 p-5 md:p-8 max-w-lg">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-[#E50914] text-white uppercase tracking-wide">
+              K-드라마 레시피
+            </span>
+            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/15 text-white">
+              NEW
+            </span>
           </div>
-
           <h1
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider uppercase leading-none mb-4"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight mb-2"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Eat What
-            <br />
-            <span className="text-gradient-red">They Eat</span>
+            드라마 속 그 음식,<br />직접 만들어보자
           </h1>
-
-          <p className="text-[#B3B3B3] text-lg sm:text-xl md:text-2xl mb-3 max-w-2xl mx-auto" style={{ fontFamily: "var(--font-body)" }}>
-            Recipes from your favorite K-Dramas
+          <p className="text-white/60 text-sm mb-4 hidden sm:block">
+            K-드라마 팬이라면 한 번쯤 먹어보고 싶었던 그 요리들
           </p>
-          <p className="text-[#B3B3B3]/60 text-sm mb-10 max-w-xl mx-auto">
-            From Squid Game&apos;s dalgona to Crash Landing&apos;s ramyeon — cook the food that made you pause the episode.
-          </p>
-
-          {/* Search bar */}
-          <Link href="/search" className="block max-w-xl mx-auto mb-8">
-            <div className="flex items-center bg-[#141414] border border-[#2A2A2A] hover:border-[#E50914] focus-within:border-[#E50914] transition-colors rounded-sm overflow-hidden group">
-              <Search className="w-5 h-5 text-[#B3B3B3] group-hover:text-[#E50914] ml-4 transition-colors" />
-              <span className="flex-1 px-4 py-4 text-[#B3B3B3] text-sm">
-                Search recipes, dramas, or ingredients...
-              </span>
-              <span
-                className="bg-[#E50914] hover:bg-[#C1050F] text-white text-xs tracking-widest uppercase px-6 py-4 transition-colors"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                Search
-              </span>
-            </div>
-          </Link>
-
-          <div className="flex flex-wrap justify-center gap-3">
-            {["Ramyeon", "Tteokbokki", "Dalgona", "Kimchi Jjigae", "Kimbap"].map((tag) => (
-              <Link
-                key={tag}
-                href={`/search?q=${encodeURIComponent(tag)}`}
-                className="text-xs text-[#B3B3B3] hover:text-[#E50914] border border-[#2A2A2A] hover:border-[#E50914]/40 px-3 py-1.5 transition-colors"
-              >
-                {tag}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#B3B3B3]/40">
-          <div className="w-0.5 h-8 bg-gradient-to-b from-transparent to-[#E50914]/60" />
-          <span className="text-xs tracking-widest uppercase">Scroll</span>
-        </div>
-      </section>
-
-      {/* FEATURED DRAMAS */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2
-              className="text-3xl sm:text-4xl font-bold tracking-wider uppercase text-white"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              Popular Dramas
-            </h2>
-            <p className="text-[#B3B3B3] text-sm mt-1">Click a drama to explore its iconic dishes</p>
-          </div>
           <Link
-            href="/dramas"
-            className="flex items-center gap-2 text-[#E50914] hover:text-white text-sm tracking-widest uppercase transition-colors"
-            style={{ fontFamily: "var(--font-heading)" }}
+            href={`/recipes/${featuredRecipe.slug}`}
+            className="inline-flex items-center gap-2 bg-white text-black text-xs font-bold px-5 py-2.5 rounded-full hover:bg-white/90 transition-colors"
           >
-            View All <ArrowRight className="w-4 h-4" />
+            지금 만들기 <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {featuredDramas.map((drama) => (
-            <DramaCard key={drama.slug} drama={drama} />
-          ))}
-        </div>
       </section>
 
-      {/* TRENDING RECIPES */}
-      <section className="py-16 px-4 bg-[#0D0D0D]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2
-                className="text-3xl sm:text-4xl font-bold tracking-wider uppercase text-white"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                Trending Recipes
-              </h2>
-              <p className="text-[#B3B3B3] text-sm mt-1">The dishes everyone&apos;s craving right now</p>
-            </div>
-            <Link
-              href="/search"
-              className="flex items-center gap-2 text-[#E50914] hover:text-white text-sm tracking-widest uppercase transition-colors"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              All Recipes <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trendingRecipes.map((recipe) => (
-              <RecipeCard key={recipe.slug} recipe={recipe} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2
-            className="text-3xl sm:text-4xl font-bold tracking-wider uppercase text-white mb-3"
-            style={{ fontFamily: "var(--font-heading)" }}
+      {/* ── CATEGORY TABS ── */}
+      <div className="flex gap-2 px-4 pt-4 pb-2 overflow-x-auto no-scrollbar">
+        {CATEGORIES.map((cat, i) => (
+          <Link
+            key={cat.label}
+            href={cat.href}
+            className={`flex-shrink-0 text-xs font-bold px-4 py-2 rounded-full transition-all ${
+              i === 0
+                ? "bg-[#E50914] text-white"
+                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+            }`}
           >
-            How It Works
-          </h2>
-          <p className="text-[#B3B3B3]">From drama scene to dinner plate in 3 steps</p>
-        </div>
+            {cat.label}
+          </Link>
+        ))}
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            {
-              icon: <Tv className="w-8 h-8 text-[#E50914]" />,
-              step: "01",
-              title: "Pick Your Drama",
-              desc: "Browse our library of K-dramas and discover all the iconic food moments.",
-            },
-            {
-              icon: <Search className="w-8 h-8 text-[#F5A623]" />,
-              step: "02",
-              title: "Describe the Scene",
-              desc: "Enter a scene description or food name, and our AI identifies and explains the dish.",
-            },
-            {
-              icon: <ChefHat className="w-8 h-8 text-[#E50914]" />,
-              step: "03",
-              title: "Cook It Tonight",
-              desc: "Get a full English recipe with ingredients, steps, and Amazon shopping links.",
-            },
-          ].map(({ icon, step, title, desc }) => (
-            <div
-              key={step}
-              className="bg-[#141414] border border-[#2A2A2A] p-8 relative overflow-hidden group hover:border-[#E50914]/30 transition-colors"
-            >
-              <div className="absolute top-4 right-4 text-6xl font-bold text-[#2A2A2A] group-hover:text-[#E50914]/10 transition-colors"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                {step}
-              </div>
-              <div className="relative">
-                <div className="w-14 h-14 bg-[#1E1E1E] border border-[#2A2A2A] flex items-center justify-center mb-4">
-                  {icon}
-                </div>
-                <h3
-                  className="text-white text-xl font-bold tracking-wider uppercase mb-2"
+      {/* ── DRAMA SECTIONS ── */}
+      <div className="py-2 pb-4">
+        {dramas.map((drama) => (
+          <section key={drama.slug} className="mb-8">
+            {/* Section header */}
+            <div className="flex items-end justify-between px-4 mb-3 mt-4">
+              <div>
+                <p className="text-[#E50914] text-[11px] font-bold uppercase tracking-wider mb-0.5">
+                  {drama.year} · {drama.genre[0]}
+                </p>
+                <h2
+                  className="text-white text-xl md:text-2xl font-bold leading-tight"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  {title}
-                </h3>
-                <p className="text-[#B3B3B3] text-sm leading-relaxed">{desc}</p>
+                  {drama.title}
+                </h2>
               </div>
+              <Link
+                href={`/dramas/${drama.slug}`}
+                className="text-[#E50914] text-sm font-bold flex items-center gap-1 flex-shrink-0 ml-4 hover:text-white transition-colors"
+              >
+                더보기 <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Horizontal recipe cards */}
+            <div className="flex gap-3 px-4 overflow-x-auto no-scrollbar pb-1">
+              {drama.recipes.map((recipe) => (
+                <RecipeCard key={recipe.slug} recipe={recipe} dramaName={drama.title} compact />
+              ))}
+              {/* See all card */}
+              <Link href={`/dramas/${drama.slug}`} className="block flex-shrink-0 w-[100px]">
+                <div className="aspect-[3/4] rounded-2xl border border-white/10 bg-white/5 flex flex-col items-center justify-center gap-2 hover:bg-white/10 transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-[#E50914]/20 border border-[#E50914]/30 flex items-center justify-center">
+                    <ArrowRight className="w-3.5 h-3.5 text-[#E50914]" />
+                  </div>
+                  <span className="text-white/50 text-[10px] text-center px-2 leading-tight">모두<br/>보기</span>
+                </div>
+              </Link>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {/* ── ALL DRAMAS ── */}
+      <section className="px-4 mb-8">
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            <p className="text-[#E50914] text-[11px] font-bold uppercase tracking-wider mb-0.5">Library</p>
+            <h2 className="text-white text-xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
+              모든 드라마
+            </h2>
+          </div>
+          <Link href="/dramas" className="text-[#E50914] text-sm font-bold flex items-center gap-1 hover:text-white transition-colors">
+            전체보기 <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+          {dramas.map((drama) => (
+            <div key={drama.slug} className="w-[140px] flex-shrink-0">
+              <DramaCard drama={drama} />
             </div>
           ))}
         </div>
       </section>
 
-      {/* AI RECIPE CTA */}
-      <section className="py-16 px-4 bg-gradient-to-r from-[#E50914]/10 via-transparent to-[#F5A623]/10 border-t border-b border-[#2A2A2A]">
-        <div className="max-w-2xl mx-auto text-center">
-          <Sparkles className="w-8 h-8 text-[#E50914] mx-auto mb-4" />
+      {/* ── AI CTA ── */}
+      <section className="px-4 pb-10">
+        <div className="rounded-3xl overflow-hidden relative bg-gradient-to-br from-[#E50914]/25 via-[#1A0505] to-[#0A0A0A] border border-[#E50914]/20 p-6">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-[#E50914]/10 rounded-full blur-3xl pointer-events-none" />
+          <Sparkles className="w-6 h-6 text-[#E50914] mb-3" />
           <h2
-            className="text-3xl sm:text-4xl font-bold tracking-wider uppercase text-white mb-4"
+            className="text-white text-xl font-bold mb-1.5"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Can&apos;t Find Your Scene?
+            원하는 레시피가 없나요?
           </h2>
-          <p className="text-[#B3B3B3] mb-8 leading-relaxed">
-            Describe any food scene from any K-drama and our AI will identify the dish and generate a complete, authentic recipe just for you.
+          <p className="text-white/50 text-sm mb-5 max-w-xs leading-relaxed">
+            K-드라마 어떤 장면이든 설명하면 AI가 정통 레시피를 만들어드려요
           </p>
           <Link
             href="/search"
-            className="inline-flex items-center gap-3 bg-[#E50914] hover:bg-[#C1050F] text-white px-8 py-4 transition-all hover:shadow-[0_0_20px_rgba(229,9,20,0.4)]"
-            style={{ fontFamily: "var(--font-heading)", letterSpacing: "0.1em" }}
+            className="inline-flex items-center gap-2 bg-[#E50914] hover:bg-[#C1050F] text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors"
           >
-            <Sparkles className="w-4 h-4" />
-            Generate AI Recipe
+            <Sparkles className="w-3.5 h-3.5" /> AI 레시피 만들기
           </Link>
         </div>
       </section>
+
     </div>
   );
 }
