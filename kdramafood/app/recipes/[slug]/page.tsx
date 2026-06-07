@@ -76,7 +76,7 @@ export default async function RecipePage({ params }: PageProps) {
           </Link>
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
+        <div className="relative z-10 w-full max-w-screen-2xl mx-auto px-4 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
           {/* LEFT: Text content */}
           <div>
             {/* Drama badge — BIG */}
@@ -95,7 +95,7 @@ export default async function RecipePage({ params }: PageProps) {
             </div>
 
             {/* Food name — HUGE */}
-            <h1 className="text-6xl sm:text-7xl md:text-8xl font-bold tracking-wider uppercase text-white leading-none mb-3"
+            <h1 className="text-6xl sm:text-7xl md:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold tracking-wider uppercase text-white leading-none mb-3"
               style={{ fontFamily: "var(--font-heading)" }}>
               {recipe.foodName}
             </h1>
@@ -125,10 +125,16 @@ export default async function RecipePage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* RIGHT: Food image card */}
+          {/* RIGHT: Drama scene card — 드라마 속 음식장면 */}
           <div className="hidden lg:flex justify-end">
-            <div className="relative w-80 h-96 rounded-sm overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(229,9,20,0.2)]">
-              <Image src={foodImgSrc} alt={recipe.foodName} fill className="object-cover" unoptimized />
+            <div className="relative w-80 h-96 xl:w-96 xl:h-[28rem] rounded-sm overflow-hidden border border-[#E50914]/30 shadow-[0_0_60px_rgba(229,9,20,0.35)]">
+              <Image src={dramaImgSrc} alt={recipe.dramaName} fill className="object-cover" unoptimized />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5">
+                <p className="text-[#E50914] text-[10px] tracking-widest uppercase font-bold mb-1" style={{ fontFamily: "var(--font-heading)" }}>드라마 속 음식장면</p>
+                <p className="text-white text-sm font-bold tracking-wide" style={{ fontFamily: "var(--font-heading)" }}>{recipe.episode || recipe.dramaName}</p>
+                <p className="text-[#B3B3B3] text-xs mt-1 leading-snug line-clamp-2">{recipe.dramaContext}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -136,7 +142,7 @@ export default async function RecipePage({ params }: PageProps) {
 
       {/* ── DRAMA SCENE SPOTLIGHT ── */}
       <div className="bg-[#0D0D0D] border-y border-[#2A2A2A]">
-        <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        <div className="max-w-screen-2xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           {/* Drama poster */}
           <div className="relative h-64 rounded-sm overflow-hidden border border-[#2A2A2A]">
             <Image src={dramaImgSrc} alt={recipe.dramaName} fill className="object-cover" unoptimized />
@@ -173,62 +179,66 @@ export default async function RecipePage({ params }: PageProps) {
       </div>
 
       {/* ── AD ── */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-screen-2xl mx-auto px-4 py-6">
         <AdSlot slotId="recipe-top" />
       </div>
 
-      {/* ── COMPLETED DISH PHOTO ── */}
-      <div className="max-w-7xl mx-auto px-4 mb-12">
-        <div className="relative h-72 md:h-96 rounded-sm overflow-hidden border border-[#2A2A2A]">
-          <Image src={foodImgSrc} alt={`Completed ${recipe.foodName}`} fill className="object-cover" unoptimized />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-transparent to-transparent" />
-          <div className="absolute bottom-6 left-6">
-            <p className="text-[#B3B3B3] text-xs tracking-widest uppercase mb-1" style={{ fontFamily: "var(--font-heading)" }}>Finished Dish</p>
-            <h3 className="text-white text-3xl font-bold tracking-wider uppercase" style={{ fontFamily: "var(--font-heading)" }}>
-              {recipe.foodName}
-            </h3>
-            <p className="text-[#F5A623]" style={{ fontFamily: "var(--font-korean)" }}>{recipe.foodNameKorean}</p>
+      {/* ── 완성된 요리 사진 + 재료 (가로 나란히) ── */}
+      <div className="max-w-screen-2xl mx-auto px-4 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+          {/* LEFT: 완성된 요리 사진 */}
+          <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[480px] rounded-sm overflow-hidden border border-[#2A2A2A]">
+            <Image src={foodImgSrc} alt={`Completed ${recipe.foodName}`} fill className="object-cover" unoptimized />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/20 to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="text-[#E50914] text-[10px] tracking-widest uppercase font-bold mb-1" style={{ fontFamily: "var(--font-heading)" }}>완성된 요리</p>
+              <h3 className="text-white text-4xl font-bold tracking-wider uppercase leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
+                {recipe.foodName}
+              </h3>
+              <p className="text-[#F5A623] text-lg mt-1" style={{ fontFamily: "var(--font-korean)" }}>{recipe.foodNameKorean}</p>
+            </div>
+          </div>
+
+          {/* RIGHT: 재료 목록 */}
+          <div>
+            <h2 className="text-3xl font-bold tracking-wider uppercase text-white mb-6 flex items-center gap-3"
+              style={{ fontFamily: "var(--font-heading)" }}>
+              <ShoppingCart className="w-6 h-6 text-[#E50914]" />
+              Ingredients
+              <span className="text-[#B3B3B3] text-base font-normal normal-case tracking-normal ml-2">
+                {recipe.ingredients.length} items
+              </span>
+            </h2>
+            <div className="space-y-2">
+              {recipe.ingredients.map((ingredient, i) => (
+                <div key={i}
+                  className="flex items-start gap-3 bg-[#141414] border border-[#2A2A2A] p-4 hover:border-[#E50914]/30 transition-colors group">
+                  <CheckSquare className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#E50914] mt-0.5 flex-shrink-0 transition-colors" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 flex-wrap">
+                      <span className="text-white text-sm font-medium">{ingredient.name}</span>
+                      <span className="text-[#F5A623] text-sm font-bold flex-shrink-0">{ingredient.amount}</span>
+                    </div>
+                    {ingredient.substituteNote && (
+                      <p className="text-[#B3B3B3] text-xs mt-0.5 italic">{ingredient.substituteNote}</p>
+                    )}
+                  </div>
+                  {ingredient.amazonSearchTerm && (
+                    <a href={`https://www.amazon.com/s?k=${encodeURIComponent(ingredient.amazonSearchTerm)}&tag=kdramafood-20`}
+                      target="_blank" rel="noopener noreferrer nofollow"
+                      className="text-[#B3B3B3] hover:text-[#F5A623] text-xs flex-shrink-0 transition-colors whitespace-nowrap">
+                      Buy →
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pb-16">
-
-        {/* ── INGREDIENTS ── */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold tracking-wider uppercase text-white mb-6 flex items-center gap-3"
-            style={{ fontFamily: "var(--font-heading)" }}>
-            <ShoppingCart className="w-6 h-6 text-[#E50914]" />
-            Ingredients
-            <span className="text-[#B3B3B3] text-base font-normal normal-case tracking-normal ml-2">
-              {recipe.ingredients.length} items
-            </span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {recipe.ingredients.map((ingredient, i) => (
-              <div key={i}
-                className="flex items-start gap-3 bg-[#141414] border border-[#2A2A2A] p-4 hover:border-[#E50914]/30 transition-colors group">
-                <CheckSquare className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#E50914] mt-0.5 flex-shrink-0 transition-colors" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2 flex-wrap">
-                    <span className="text-white text-sm font-medium">{ingredient.name}</span>
-                    <span className="text-[#F5A623] text-sm font-bold flex-shrink-0">{ingredient.amount}</span>
-                  </div>
-                  {ingredient.substituteNote && (
-                    <p className="text-[#B3B3B3] text-xs mt-0.5 italic">{ingredient.substituteNote}</p>
-                  )}
-                </div>
-                {ingredient.amazonSearchTerm && (
-                  <a href={`https://www.amazon.com/s?k=${encodeURIComponent(ingredient.amazonSearchTerm)}&tag=kdramafood-20`}
-                    target="_blank" rel="noopener noreferrer nofollow"
-                    className="text-[#B3B3B3] hover:text-[#F5A623] text-xs flex-shrink-0 transition-colors whitespace-nowrap">
-                    Buy →
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="max-w-screen-2xl mx-auto px-4 pb-16">
 
         {/* ── INSTRUCTIONS ── */}
         <div className="mb-12">
