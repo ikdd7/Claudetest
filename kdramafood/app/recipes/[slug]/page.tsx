@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getRecipeBySlug, getAllRecipes } from "@/data/dramas";
 import RecipeCard from "@/components/RecipeCard";
 import AdSlot from "@/components/AdSlot";
@@ -74,8 +75,8 @@ export default async function RecipePage({ params }: PageProps) {
 
   const { drama, ...recipe } = result;
   const diff = DIFFICULTY_STYLES[recipe.difficulty];
-  const gradientIndex = recipe.slug.length % FOOD_HERO_GRADIENTS.length;
-  const gradient = FOOD_HERO_GRADIENTS[gradientIndex];
+  const slugKey = recipe.slug.replace(/^(cloy|bp|eaw|qot|mlfts|reply1988|startup)-?/, "");
+  const heroImgSrc = `/api/og?slug=${slugKey}&name=${encodeURIComponent(recipe.foodName)}&korean=${encodeURIComponent(recipe.foodNameKorean)}&type=recipe`;
 
   const otherRecipes = drama.recipes
     .filter((r) => r.slug !== recipe.slug)
@@ -84,9 +85,17 @@ export default async function RecipePage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* HERO */}
-      <div className={`relative min-h-[55vh] bg-gradient-to-br ${gradient} flex items-end`}>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/50 to-transparent" />
-        <div className="absolute inset-0 korean-pattern-bg opacity-20" />
+      <div className="relative min-h-[55vh] flex items-end overflow-hidden">
+        <Image
+          src={heroImgSrc}
+          alt={recipe.foodName}
+          fill
+          className="object-cover"
+          unoptimized
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/20" />
+        <div className="absolute inset-0 korean-pattern-bg opacity-10" />
 
         {/* Back button */}
         <div className="absolute top-6 left-4 z-20">

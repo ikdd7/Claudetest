@@ -1,6 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Recipe, Drama } from "@/types";
-import { Clock, ChefHat, Tv } from "lucide-react";
+import { Clock, Tv } from "lucide-react";
 
 interface RecipeCardProps {
   recipe: Recipe & { drama?: Drama };
@@ -13,41 +14,27 @@ const DIFFICULTY_COLORS = {
   Hard: "text-[#E50914] border-[#E50914]/30 bg-[#E50914]/10",
 };
 
-const FOOD_GRADIENTS = [
-  "from-red-950 via-orange-950 to-amber-900",
-  "from-amber-950 via-yellow-950 to-orange-900",
-  "from-orange-950 via-red-950 to-rose-900",
-  "from-stone-900 via-amber-950 to-yellow-900",
-  "from-red-900 via-rose-950 to-pink-950",
-];
-
 export default function RecipeCard({ recipe, dramaName }: RecipeCardProps) {
   const name = dramaName || recipe.drama?.title || recipe.dramaName;
-  const gradientIndex = recipe.slug.length % FOOD_GRADIENTS.length;
-  const gradient = FOOD_GRADIENTS[gradientIndex];
+  const slug = recipe.slug.replace(/^(cloy|bp|eaw|qot|mlfts|reply1988|startup)-?/, "");
+  const imgSrc = `/api/og?slug=${slug}&name=${encodeURIComponent(recipe.foodName)}&korean=${encodeURIComponent(recipe.foodNameKorean)}&type=recipe`;
 
   return (
     <Link href={`/recipes/${recipe.slug}`} className="group block">
       <div className="bg-[#141414] border border-[#2A2A2A] group-hover:border-[#E50914]/40 rounded-sm overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(229,9,20,0.2)] h-full">
         {/* Image area */}
-        <div className={`relative h-44 bg-gradient-to-br ${gradient} overflow-hidden`}>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-14 h-14 rounded-full bg-black/30 border border-white/10 flex items-center justify-center mx-auto mb-2">
-                <ChefHat className="w-7 h-7 text-[#F5A623]" />
-              </div>
-              <p
-                className="text-white/60 text-xs tracking-widest uppercase"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                {recipe.foodNameKorean}
-              </p>
-            </div>
-          </div>
+        <div className="relative h-44 overflow-hidden">
+          <Image
+            src={imgSrc}
+            alt={recipe.foodName}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            unoptimized
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
 
           {/* Difficulty badge */}
-          <div className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 border rounded-sm ${DIFFICULTY_COLORS[recipe.difficulty]}`}>
+          <div className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 border rounded-sm z-10 ${DIFFICULTY_COLORS[recipe.difficulty]}`}>
             {recipe.difficulty}
           </div>
         </div>
