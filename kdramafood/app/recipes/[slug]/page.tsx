@@ -62,7 +62,7 @@ export default async function RecipePage({ params }: PageProps) {
     <div className="min-h-screen bg-[#0A0A0A]">
 
       {/* ── HERO ── */}
-      <div className="relative min-h-[75vh] flex items-end overflow-hidden">
+      <div className="relative min-h-[60vh] md:min-h-[75vh] flex items-end overflow-hidden">
         {/* Background: food image blurred */}
         <Image src={foodImgSrc} alt={recipe.foodName} fill className="object-cover scale-110 blur-sm" unoptimized priority />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/80 to-[#0A0A0A]/30" />
@@ -76,58 +76,66 @@ export default async function RecipePage({ params }: PageProps) {
           </Link>
         </div>
 
-        <div className="relative z-10 w-full max-w-screen-2xl mx-auto px-4 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-12 md:pb-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-end">
           {/* LEFT: Text content */}
           <div>
-            {/* Drama badge — BIG */}
-            <div className="flex items-center gap-3 mb-5">
-              <div className="bg-[#E50914] px-3 py-1">
+            {/* Drama badge */}
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
+              <div className="bg-[#E50914] px-3 py-1 flex-shrink-0">
                 <span className="text-white text-xs font-bold tracking-widest uppercase" style={{ fontFamily: "var(--font-heading)" }}>
                   As seen in
                 </span>
               </div>
-              <span className="text-white text-lg font-bold tracking-wide" style={{ fontFamily: "var(--font-heading)" }}>
+              <span className="text-white text-base md:text-lg font-bold tracking-wide" style={{ fontFamily: "var(--font-heading)" }}>
                 {recipe.dramaName}
               </span>
               {recipe.episode && (
-                <span className="text-[#B3B3B3] text-sm border border-[#2A2A2A] px-2 py-0.5">{recipe.episode}</span>
+                <span className="text-[#B3B3B3] text-xs md:text-sm border border-[#2A2A2A] px-2 py-0.5">{recipe.episode}</span>
               )}
             </div>
 
-            {/* Food name — HUGE */}
-            <h1 className="text-6xl sm:text-7xl md:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold tracking-wider uppercase text-white leading-none mb-3"
+            {/* Food name */}
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-wider uppercase text-white leading-none mb-3"
               style={{ fontFamily: "var(--font-heading)" }}>
               {recipe.foodName}
             </h1>
-            <p className="text-[#F5A623] text-2xl mb-4" style={{ fontFamily: "var(--font-korean)" }}>
+            <p className="text-[#F5A623] text-xl md:text-2xl mb-3 md:mb-4" style={{ fontFamily: "var(--font-korean)" }}>
               {recipe.foodNameKorean}
             </p>
-            <p className="text-[#B3B3B3] text-base leading-relaxed mb-6 max-w-xl">{recipe.description}</p>
+            <p className="text-[#B3B3B3] text-sm md:text-base leading-relaxed mb-5 md:mb-6 max-w-xl">{recipe.description}</p>
 
             {/* Stats bar */}
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-2 bg-[#141414] border border-[#2A2A2A] px-4 py-2">
-                <Clock className="w-4 h-4 text-[#B3B3B3]" />
-                <span className="text-[#B3B3B3] text-sm">Prep <span className="text-white font-bold">{recipe.prepTime}m</span></span>
+            <div className="flex flex-wrap items-center gap-2 md:gap-3">
+              <div className="flex items-center gap-1.5 md:gap-2 bg-[#141414] border border-[#2A2A2A] px-3 md:px-4 py-1.5 md:py-2">
+                <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#B3B3B3]" />
+                <span className="text-[#B3B3B3] text-xs md:text-sm">Prep <span className="text-white font-bold">{recipe.prepTime}m</span></span>
               </div>
-              <div className="flex items-center gap-2 bg-[#141414] border border-[#2A2A2A] px-4 py-2">
-                <Timer className="w-4 h-4 text-[#F5A623]" />
-                <span className="text-[#B3B3B3] text-sm">Cook <span className="text-white font-bold">{recipe.cookTime}m</span></span>
+              <div className="flex items-center gap-1.5 md:gap-2 bg-[#141414] border border-[#2A2A2A] px-3 md:px-4 py-1.5 md:py-2">
+                <Timer className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#F5A623]" />
+                <span className="text-[#B3B3B3] text-xs md:text-sm">Cook <span className="text-white font-bold">{recipe.cookTime}m</span></span>
               </div>
-              <div className="flex items-center gap-2 bg-[#E50914]/10 border border-[#E50914]/30 px-4 py-2">
-                <Clock className="w-4 h-4 text-[#E50914]" />
-                <span className="text-[#E50914] text-sm font-bold">Total {recipe.prepTime + recipe.cookTime}m</span>
+              <div className="flex items-center gap-1.5 md:gap-2 bg-[#E50914]/10 border border-[#E50914]/30 px-3 md:px-4 py-1.5 md:py-2">
+                <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#E50914]" />
+                <span className="text-[#E50914] text-xs md:text-sm font-bold">Total {recipe.prepTime + recipe.cookTime}m</span>
               </div>
-              <div className={`flex items-center gap-2 px-4 py-2 border text-sm font-bold ${diff.color} ${diff.bg} ${diff.border}`}>
-                <ChefHat className="w-4 h-4" />
+              <div className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 border text-xs md:text-sm font-bold ${diff.color} ${diff.bg} ${diff.border}`}>
+                <ChefHat className="w-3.5 h-3.5 md:w-4 md:h-4" />
                 {recipe.difficulty}
               </div>
             </div>
+
+            {/* Mobile: drama scene tag (card is hidden on mobile) */}
+            {recipe.episode && (
+              <div className="lg:hidden mt-4 inline-flex items-center gap-2 bg-[#141414] border border-[#E50914]/20 px-3 py-2">
+                <span className="text-[#E50914] text-[10px] font-bold tracking-wider uppercase" style={{ fontFamily: "var(--font-heading)" }}>드라마 속 음식장면</span>
+                <span className="text-[#B3B3B3] text-[10px]">· {recipe.episode}</span>
+              </div>
+            )}
           </div>
 
-          {/* RIGHT: Drama scene card — 드라마 속 음식장면 */}
-          <div className="hidden lg:flex justify-end">
-            <div className="relative w-80 h-96 xl:w-96 xl:h-[28rem] rounded-sm overflow-hidden border border-[#E50914]/30 shadow-[0_0_60px_rgba(229,9,20,0.35)]">
+          {/* RIGHT: Drama scene card — 드라마 속 음식장면 (desktop only) */}
+          <div className="hidden lg:flex justify-center items-end pb-4">
+            <div className="relative w-[280px] h-[360px] xl:w-[320px] xl:h-[400px] rounded-sm overflow-hidden border border-[#E50914]/30 shadow-[0_0_60px_rgba(229,9,20,0.35)]">
               <Image src={dramaImgSrc} alt={recipe.dramaName} fill className="object-cover" unoptimized />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
